@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Enums\CustomerStatus;
+use App\Enums\Priority;
+use App\Models\Customer;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +18,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $date = CarbonImmutable::today();
+        $customers = [
+            [
+                'Peter', 
+                'General consultation', 
+                '09:45', Priority::NORMAL,
+                
+            ],
+            [
+                'Mary', 
+                'Urgent consultation', 
+                '11:01', Priority::EMERGENCY
+            ],
+            [
+                'John', 
+                'Urgent consultation', 
+                '11:04', Priority::EMERGENCY
+            ],
+            [
+                'Susan', 
+                'Prescription collection', 
+                '10:25', Priority::PRIORITY
+            ],
+            [
+                'Daniel', 
+                'Lab results', 
+                '10:50', Priority::NORMAL
+            ],
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($customers as [$name, $service, $time, $priority]) {
+            Customer::create([
+                'name' => $name,
+                'service' => $service,
+                'arrival_at' => $date->setTimeFromTimeString($time),
+                'original_priority' => $priority,
+                'status' => CustomerStatus::Waiting,
+            ]);
+        }
     }
 }
