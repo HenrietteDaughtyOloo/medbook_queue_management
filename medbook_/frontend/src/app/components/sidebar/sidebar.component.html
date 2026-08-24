@@ -1,0 +1,27 @@
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">M</div>
+    <div><strong>Medbook</strong><span>Service Centre</span></div>
+  </div>
+
+  <div class="terminal-card">
+    <div class="avatar">AT</div>
+    <div><strong>Admin Terminal</strong><span><i></i> Online</span></div>
+  </div>
+
+  <nav aria-label="Quick Actions">
+    <button class="nav-item active" (click)="scrollTo('overview')">
+      Quick Scroll to Section
+    </button>
+    <button class="nav-item" (click)="scrollTo('queue')">
+      Waiting Queue <span class="nav-count">{{ queueLength }}</span>
+    </button>
+    <button class="nav-item" (click)="scrollTo('registration')">
+      Registration
+    </button>
+  </nav>
+
+  <button class="new-registration" (click)="scrollTo('registration')">
+    <span>＋</span> New Registration
+  </button>
+</aside>

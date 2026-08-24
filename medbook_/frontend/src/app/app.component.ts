@@ -4,14 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Customer, QueueResponse } from './models/customer.model';
 import { QueueService } from './services/queue.service';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    SidebarComponent,
+    FormsModule,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss'
 })
+
+
 export class AppComponent implements OnInit {
   title = 'Medbook Queue';
   queue: Customer[] = [];
