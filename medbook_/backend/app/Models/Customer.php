@@ -13,7 +13,7 @@ class Customer extends Model
 
     protected $fillable = [
         'name', 
-        'service_required', 
+        'service', 
         'arrival_at', 
         'original_priority', 
         'status'
