@@ -14,9 +14,8 @@ The system never stores a queue position. For every request it selects only `Wai
 Terminal 1:
 
 ```bash
-mysql -u root -p -e 'CREATE DATABASE medbook_queue'
 cd backend
-cp .env.example .env                 # set DB_USERNAME/DB_PASSWORD if needd\
+cp .env.example .env                 
 composer install
 php artisan key:generate
 php artisan migrate --seed
