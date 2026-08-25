@@ -1,0 +1,45 @@
+<section id="registration" class="glass-card registration-card">
+    <div class="registration-heading">
+        <div class="section-icon">+</div>
+        <div>
+            <p class="eyebrow">New arrival</p>
+            <h2>Customer registration</h2>
+            <p>Enter the customer's details to assign them to the service queue.</p>
+        </div>
+    </div>
+    <form (ngSubmit)="submit()" #customerForm="ngForm">
+        <label>
+            <span>Customer name</span>
+            <div class="input-wrap"><span>♙</span><input name="name" [(ngModel)]="form.name" required maxlength="100"
+                    placeholder="e.g. Jane Doe"></div>
+        </label>
+
+        <label>
+            <span>Service required</span>
+            <div class="input-wrap"><span>◇</span><input name="service" [(ngModel)]="form.service" required
+                    maxlength="255" placeholder="e.g. General consultation"></div>
+        </label>
+
+        <label>
+            <span>Arrival date and time</span>
+            <div class="input-wrap">
+                <span>◷</span>
+                <input type="datetime-local" name="arrival" [(ngModel)]="form.arrival_at" (focus)="isUserEditing = true"
+                    (blur)="isUserEditing = false" required>
+            </div>
+        </label>
+        <fieldset>
+            <legend>Original Priority</legend>
+            <div class="priority-options"><button type="button" *ngFor="let p of ['Normal', 'Priority', 'Emergency']"
+                    [class.selected]="form.original_priority === p" [attr.data-priority]="p"
+                    (click)="form.original_priority = p">{{ p }}</button></div>
+        </fieldset>
+
+        <div class="form-footer">
+            <p><span>i</span> Priority can escalate automatically while the customer waits.</p>
+            <div><button type="button" class="secondary" (click)="clearForm()">Clear form</button><button type="submit"
+                    class="primary register" [disabled]="customerForm.invalid">Register &amp; add to queue
+                    <span>→</span></button></div>
+        </div>
+    </form>
+</section>

@@ -1,75 +1,19 @@
-<div style="display: flex; min-height: 100vh;">
-  
-    <app-sidebar [queueLength]="queue.length" (scrollRequested)="scrollTo($event)"></app-sidebar>
-
-<main style="max-width: 900px; margin: 2rem auto; font-family: sans-serif; padding: 1rem;">
-  <h2>{{ title }}</h2>
-
-  <div *ngIf="error" style="color: red; margin-bottom: 1rem;">{{ error }}</div>
-  <div *ngIf="message" style="color: green; margin-bottom: 1rem;">{{ message }}</div>
-
-  <!-- Add Customer Form -->
-  <section style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 2rem;">
-    <h3>Add Customer</h3>
-    <form (ngSubmit)="addCustomer()">
-      <input type="text" [(ngModel)]="form.name" name="name" placeholder="Name" required />
-      <input type="text" [(ngModel)]="form.service" name="service" placeholder="Service Required" required />
-      <input type="datetime-local" [(ngModel)]="form.arrival_at" name="arrival_at" required />
-      <select [(ngModel)]="form.original_priority" name="original_priority">
-        <option value="Normal">Normal</option>
-        <option value="Priority">Priority</option>
-        <option value="Emergency">Emergency</option>
-      </select>
-      <button type="submit">Add to Queue</button>
-    </form>
-  </section>
-
-  <!-- Active Customer Section -->
-  <section style="border: 1px solid #007bff; padding: 1rem; margin-bottom: 2rem;">
-    <h3>Currently Being Served</h3>
-    <div *ngIf="activeCustomer; else noOneServed">
-      <p><strong>{{ activeCustomer.name }}</strong> ({{ activeCustomer.service }})</p>
-      <button *ngFor="let targetStatus of activeCustomer.allowed_transitions"
-        (click)="changeStatus(activeCustomer, targetStatus)">
-        Mark as {{ targetStatus }}
-      </button>
-    </div>
-    <ng-template #noOneServed>
-      <p>No customer is currently being served.</p>
-    </ng-template>
-  </section>
-
-  <!-- Queue Table -->
-  <section>
-    <h3>Waiting Queue</h3>
-    <table border="1" cellpadding="8" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>Pos</th>
-          <th>Name</th>
-          <th>Service</th>
-          <th>Original Priority</th>
-          <th>Effective Priority</th>
-          <th>Waiting Time</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let c of queue">
-          <td>{{ c.position }}</td>
-          <td>{{ c.name }}</td>
-          <td>{{ c.service }}</td>
-          <td>{{ c.original_priority }}</td>
-          <td><strong>{{ c.effective_priority }}</strong></td>
-          <td>{{ c.waiting_minutes }} mins</td>
-          <td>
-            <button *ngFor="let targetStatus of c.allowed_transitions" (click)="changeStatus(c, targetStatus)">
-              Set {{ targetStatus }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-</main>
+<div class="app-shell" [class.dark]="isDarkMode">
+  <app-sidebar [queueLength]="queue.length" (scrollRequested)="scrollTo($event)"></app-sidebar>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="mobile-brand"><span>M</span> Medbook</div>
+      <div class="topbar-status"><i></i> System operational</div>
+      <div class="topbar-actions">
+        <button class="icon-button" (click)="loadQueue()" [disabled]="loading" aria-label="Refresh queue" title="Refresh queue">↻</button>
+        <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Use light mode' : 'Use dark mode'"><span>{{ isDarkMode ? 'Light' : 'Dark' }}</span></button>
+      </div>
+    </header>
+    <main>
+      <div class="notice success" *ngIf="message"><span>✓</span>{{ message }}</div>
+      <div class="notice error" *ngIf="error"><span>!</span>{{ error }}</div>
+      <app-queue-board [queue]="queue" [nextCustomer]="nextCustomer" [activeCustomer]="activeCustomer" (statusChanged)="changeStatus($event.customer, $event.status)"></app-queue-board>
+      <app-customer-form (formSubmit)="onAddCustomer($event)"></app-customer-form>
+    </main>
+  </div>
 </div>

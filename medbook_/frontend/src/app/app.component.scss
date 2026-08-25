@@ -1,23 +1,23 @@
 :host {
-    --bg: #eef3f1;
-    --surface: rgba(255, 255, 255, .76);
+    --bg: #f2f7f5;
+    --surface: rgba(255, 255, 255, .88);
     --surface-solid: #fff;
     --surface-soft: #f4f7f6;
-    --sidebar: rgba(247, 250, 249, .9);
-    --text: #10251f;
-    --muted: #708079;
+    --sidebar: rgba(248, 252, 250, .96);
+    --text: #102a22;
+    --muted: #758982;
     --line: rgba(31, 76, 61, .11);
-    --brand: #105b49;
-    --brand-2: #16735c;
-    --brand-soft: #e2f3ed;
+    --brand: #11745d;
+    --brand-2: #198b70;
+    --brand-soft: #e0f3ec;
     --danger: #d94646;
     --danger-soft: #fff0f0;
     --warning: #d27b18;
-    --shadow: 0 16px 50px rgba(30, 62, 51, .08);
+    --shadow: 0 18px 45px rgba(31, 76, 61, .07);
     display: block;
     min-height: 100vh;
     color: var(--text);
-    font-family: Inter, "Segoe UI", system-ui, sans-serif;
+    font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
 }
 
 * {
@@ -35,9 +35,8 @@ button {
 
 .app-shell {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 250px minmax(0, 1fr);
-    background: radial-gradient(circle at 80% 5%, rgba(110, 190, 164, .16), transparent 25%), linear-gradient(145deg, #f8faf9 0%, var(--bg) 100%);
+    display: block;
+    background: radial-gradient(circle at 82% 2%, rgba(117, 205, 179, .16), transparent 28%), linear-gradient(145deg, #fbfdfc 0%, var(--bg) 100%);
     transition: .25s ease;
 
     &.dark {
@@ -62,20 +61,21 @@ button {
 
 .workspace {
     min-width: 0;
+    margin-left: 250px;
 }
 
 .topbar {
-    height: 72px;
-    padding: 0 38px;
+    height: 70px;
+    padding: 0 clamp(22px, 4vw, 58px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--line);
-    background: rgba(255, 255, 255, .42);
+    background: rgba(248, 252, 250, .86);
     backdrop-filter: blur(22px);
     position: sticky;
     top: 0;
-    z-index: 4;
+    z-index: 10;
 }
 
 .dark .topbar {
@@ -159,7 +159,7 @@ button {
 main {
     max-width: 1370px;
     margin: auto;
-    padding: 44px clamp(22px, 4vw, 58px) 70px;
+    padding: 48px clamp(22px, 4vw, 58px) 76px;
 }
 
 .notice {
@@ -217,11 +217,11 @@ section {
     align-items: flex-end;
     justify-content: space-between;
     gap: 30px;
-    margin-bottom: 27px;
+    margin-bottom: 28px;
 
     h1 {
         margin: 0;
-        font-size: clamp(2rem, 4vw, 3.35rem);
+        font-size: clamp(2.25rem, 4vw, 3.35rem);
         letter-spacing: -.055em;
         line-height: 1;
     }
@@ -267,11 +267,11 @@ section {
 }
 
 .glass-card {
-    border: 1px solid rgba(255, 255, 255, .72);
+    border: 1px solid rgba(210, 226, 220, .72);
     background: var(--surface);
     backdrop-filter: blur(22px);
     box-shadow: var(--shadow);
-    border-radius: 20px;
+    border-radius: 18px;
 }
 
 .dark .glass-card {
@@ -286,8 +286,8 @@ section {
 }
 
 @media(max-width:1050px) {
-    .app-shell {
-        grid-template-columns: 210px;
+    .workspace {
+        margin-left: 220px;
     }
 
     .summary-grid {
@@ -303,6 +303,10 @@ section {
     .topbar {
         height: 64px;
         padding: 0 18px;
+    }
+
+    .workspace {
+        margin-left: 0;
     }
 
     .mobile-brand {

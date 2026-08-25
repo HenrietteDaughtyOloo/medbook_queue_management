@@ -5,6 +5,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Customer, QueueResponse } from './models/customer.model';
 import { QueueService } from './services/queue.service';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { CustomerFormComponent } from './components/customer-form/customer-form.component';
+import { QueueBoardComponent } from './components/queue-board/queue-board.component';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +14,12 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   imports: [
     CommonModule,
     SidebarComponent,
+    CustomerFormComponent,
+    QueueBoardComponent,
     FormsModule,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 
 
@@ -57,6 +61,7 @@ export class AppComponent implements OnInit {
           return;
         }
         this.queue = data.queue;
+        this.nextCustomer = data.queue[0] ?? data.next_customer ?? null;
         this.activeCustomer = data.active_customer ?? null;
         this.loading = false;
       },
@@ -78,6 +83,16 @@ export class AppComponent implements OnInit {
       },
       error: (error) => this.handleError(error),
     });
+  }
+
+  onAddCustomer(form: {
+    name: string;
+    service: string;
+    arrival_at: string;
+    original_priority: string;
+  }): void {
+    this.form = form;
+    this.addCustomer();
   }
 
   changeStatus(customer: Customer, status: string): void {

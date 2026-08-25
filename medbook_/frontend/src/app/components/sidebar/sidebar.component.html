@@ -11,14 +11,14 @@
 
   <nav aria-label="Quick Actions">
     <button class="nav-item active" (click)="scrollTo('overview')">
-      Quick Scroll to Section
+      Scroll to Overview
     </button>
     <button class="nav-item" (click)="scrollTo('queue')">
-      Waiting Queue <span class="nav-count">{{ queueLength }}</span>
+      Scroll to Waiting Queue <span class="nav-count">{{ queueLength }}</span>
     </button>
-    <button class="nav-item" (click)="scrollTo('registration')">
+    <!-- <button class="nav-item" (click)="scrollTo('registration')">
       Registration
-    </button>
+    </button> -->
   </nav>
 
   <button class="new-registration" (click)="scrollTo('registration')">
