@@ -1,67 +1,148 @@
 <section id="overview" class="hero-section">
-  <div class="page-heading">
-    <div>
-      <p class="eyebrow">Live service desk</p>
-      <h1>Customer queue</h1>
-      <p>Effective priority is recalculated from each customer's original arrival time.</p>
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">Live service desk</p>
+            <h1>Customer queue</h1>
+            <p>Effective priority is recalculated from each customer's original arrival time.</p>
+        </div>
+        <div class="live-pill">
+            <i></i>
+            <h4>Live queue</h4>
+            <strong class="queue-badge">{{ queue.length }}</strong>
+        </div>
     </div>
-    <div class="live-pill"><i></i> Live queue <strong>{{ queue.length }}</strong></div>
-  </div>
+    <div class="summary-grid">
+        <article class="glass-card next-card">
+            <div class="card-label"><span>Serve next</span><b
+                    *ngIf="nextCustomer && (nextCustomer.waiting_minutes || 0) >= 45">Wait escalated</b></div>
+            <ng-container *ngIf="nextCustomer; else emptyNext">
+                <div class="next-layout">
+                    <div>
+                        <h2>{{ nextCustomer.name }}</h2>
+                        <p>{{ nextCustomer.service }}</p>
+                    </div>
+                    <span class="serve-tooltip"
+                        [attr.title]="activeCustomer ? 'Already serving someone else. Complete or return that session before serving another customer.' : null">
+                        <button class="primary large" (click)="changeStatus(nextCustomer, 'Being Served')"
+                            [disabled]="!!activeCustomer">Call to desk <span>→</span></button>
+                    </span>
+                </div>
+                <div class="metric-row">
+                    <div><span>Arrival time</span><strong>{{ nextCustomer.arrival_at | date:'h:mm a' }}</strong></div>
+                    <div><span>Wait time</span><strong>{{ nextCustomer.waiting_minutes }} min</strong></div>
+                    <div><span>Effective priority</span><strong
+                            [class.emergency-text]="nextCustomer.effective_priority === 'Emergency'">{{
+                            nextCustomer.effective_priority }}<em
+                                *ngIf="nextCustomer.effective_priority !== nextCustomer.original_priority"> ·
+                                Escalated</em></strong></div>
+                </div>
+            </ng-container>
+            <ng-template #emptyNext>
+                <div class="empty-state compact">
+                    <div class="empty-icon">✓</div><strong>Queue is clear</strong>
+                    <p>New arrivals will appear here automatically.</p>
+                </div>
+            </ng-template>
+        </article>
 
-  <div class="summary-grid">
-    <article class="glass-card next-card">
-      <div class="card-label"><span>Serve next</span><b *ngIf="nextCustomer && (nextCustomer.waiting_minutes || 0) >= 45">Wait escalated</b></div>
-      <ng-container *ngIf="nextCustomer; else emptyNext">
-        <div class="next-layout">
-          <div>
-            <h2>{{ nextCustomer.name }}</h2>
-            <p>{{ nextCustomer.service }}</p>
-          </div>
-          <span class="serve-tooltip" [attr.title]="activeCustomer ? 'Already serving someone else. Complete or return that session before serving another customer.' : null">
-            <button class="primary large" (click)="changeStatus(nextCustomer, 'Being Served')" [disabled]="!!activeCustomer">Call to desk <span>→</span></button>
-          </span>
-        </div>
-        <div class="metric-row">
-          <div><span>Arrival time</span><strong>{{ nextCustomer.arrival_at | date:'h:mm a' }}</strong></div>
-          <div><span>Wait time</span><strong>{{ nextCustomer.waiting_minutes }} min</strong></div>
-          <div><span>Effective priority</span><strong [class.emergency-text]="nextCustomer.effective_priority === 'Emergency'">{{ nextCustomer.effective_priority }}<em *ngIf="nextCustomer.effective_priority !== nextCustomer.original_priority"> · Escalated</em></strong></div>
-        </div>
-      </ng-container>
-      <ng-template #emptyNext>
-        <div class="empty-state compact"><div class="empty-icon">✓</div><strong>Queue is clear</strong><p>New arrivals will appear here automatically.</p></div>
-      </ng-template>
-    </article>
-
-    <article class="glass-card session-card" [class.has-session]="activeCustomer">
-      <div class="card-label"><span>Active session</span><b class="active-tag" *ngIf="activeCustomer">In service</b></div>
-      <ng-container *ngIf="activeCustomer; else noSession">
-        <div class="session-person">
-          <div class="person-icon">{{ activeCustomer.name.charAt(0) }}</div>
-          <div><h3>{{ activeCustomer.name }}</h3><p>{{ activeCustomer.service }}</p></div>
-        </div>
-        <div class="session-actions"><button class="primary" (click)="changeStatus(activeCustomer, 'Completed')">Complete session</button><button class="text-button" (click)="changeStatus(activeCustomer, 'Waiting')">Return to queue</button></div>
-      </ng-container>
-      <ng-template #noSession>
-        <div class="empty-state"><div class="empty-icon desk">▱</div><strong>Nobody currently</strong><p>Call the next customer from the queue to begin a session.</p></div>
-      </ng-template>
-    </article>
-  </div>
+        <article class="glass-card session-card" [class.has-session]="activeCustomer">
+            <div class="card-label"><span>Active session</span><b class="active-tag" *ngIf="activeCustomer">In
+                    service</b></div>
+            <ng-container *ngIf="activeCustomer; else noSession">
+                <div class="session-person">
+                    <div class="person-icon">{{ activeCustomer.name.charAt(0) }}</div>
+                    <div>
+                        <h3>{{ activeCustomer.name }}</h3>
+                        <p>{{ activeCustomer.service }}</p>
+                    </div>
+                </div>
+                <div class="session-actions"><button class="primary"
+                        (click)="changeStatus(activeCustomer, 'Completed')">Complete session</button><button
+                        class="text-button" (click)="changeStatus(activeCustomer, 'Waiting')">Return to queue</button>
+                </div>
+            </ng-container>
+            <ng-template #noSession>
+                <div class="empty-state">
+                    <div class="empty-icon desk">▱</div><strong>Nobody currently</strong>
+                    <p>Call the next customer from the queue to begin a session.</p>
+                </div>
+            </ng-template>
+        </article>
+    </div>
 </section>
 
 <section id="queue" class="glass-card queue-card">
-  <div class="section-heading"><div><p class="eyebrow">Waiting room</p><h2>Ordered queue</h2><p>Sorted by effective priority, arrival time, then creation order.</p></div><div class="queue-total"><strong>{{ queue.length }}</strong><span>waiting</span></div></div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Customer</th><th>Arrival &amp; wait</th><th>Priority status</th><th>Status &amp; action</th></tr></thead>
-      <tbody>
-        <tr *ngFor="let customer of queue">
-          <td><div class="customer-cell"><span class="position">{{ customer.position }}</span><span class="person-icon small">{{ customer.name.charAt(0) }}</span><div><strong>{{ customer.name }}</strong><small>{{ customer.service }}</small></div></div></td>
-          <td><div class="time-cell"><span>{{ customer.arrival_at | date:'MMM d, h:mm a' }}</span><strong>{{ customer.waiting_minutes }} min</strong></div></td>
-          <td><div class="priority-pair"><span>Original: <b class="badge">{{ customer.original_priority }}</b></span><span>Effective: <b class="badge" [class.emergency]="customer.effective_priority === 'Emergency'">{{ customer.effective_priority }}</b></span></div></td>
-          <td><div class="action-cell"><span class="waiting-state"><i></i> Waiting</span><div><span class="serve-tooltip" [attr.title]="activeCustomer ? 'Already serving someone else. Complete or return that session before serving another customer.' : null"><button class="serve-button" (click)="changeStatus(customer, 'Being Served')" [disabled]="!!activeCustomer">Serve <span>↑</span></button></span><button class="cancel-button" (click)="changeStatus(customer, 'Cancelled')" aria-label="Cancel customer" title="Cancel customer">x</button></div></div></td>
-        </tr>
-        <tr *ngIf="!queue.length"><td colspan="4"><div class="empty empty-state table-empty"><div class="empty-icon">✓</div><strong>No customers are waiting</strong><p>Use the registration form below to add a new arrival.</p></div></td></tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Waiting room</p>
+            <h2>Ordered queue</h2>
+            <p>Sorted by effective priority, arrival time, then creation order.</p>
+        </div>
+        <div class="queue-total"><strong>{{ queue.length }}</strong><span>waiting</span></div>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Arrival &amp; wait</th>
+                    <th>Priority status</th>
+                    <th>Status &amp; action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let customer of queue">
+                    <td>
+                        <div class="customer-cell"><span class="position">{{ customer.position }}</span><span
+                                class="person-icon small">{{ customer.name.charAt(0) }}</span>
+                            <div><strong>{{ customer.name }}</strong><small>{{ customer.service }}</small></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="time-cell"><span>{{ customer.arrival_at | date:'MMM d, h:mm a' }}</span><strong>{{
+                                customer.waiting_minutes }} min</strong></div>
+                    </td>
+                    <td>
+                        <div class="priority-pair"><span>Original: <b class="badge">{{ customer.original_priority
+                                    }}</b></span><span>Effective: <b class="badge"
+                                    [class.emergency]="customer.effective_priority === 'Emergency'">{{
+                                    customer.effective_priority }}</b></span></div>
+                    </td>
+                    <td>
+                    <div class="action-cell">
+                        <span class="waiting-state"><i></i> Waiting</span>
+                        <div>
+                        <span 
+                            class="serve-tooltip" 
+                            [attr.title]="activeCustomer ? 'Already serving someone else. Complete or return that session before serving another customer.' : null">
+                            <button 
+                            class="serve-button" 
+                            (click)="changeStatus(customer, 'Being Served')" 
+                            [disabled]="!!activeCustomer">
+                            Serve <span>↑</span>
+                            </button>
+                        </span>
+                        <button 
+                            class="cancel-button" 
+                            (click)="changeStatus(customer, 'Cancelled')" 
+                            aria-label="Cancel customer" 
+                            title="Cancel customer">
+                            x
+                        </button>
+                        </div>
+                    </div>
+                    </td>       
+                
+                </tr>
+                <tr *ngIf="!queue.length">
+                    <td colspan="4">
+                        <div class="empty empty-state table-empty">
+                            <div class="empty-icon">✓</div><strong>No customers are waiting</strong>
+                            <p>Use the registration form below to add a new arrival.</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </section>

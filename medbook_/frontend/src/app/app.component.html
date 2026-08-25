@@ -6,11 +6,11 @@
       <div class="topbar-status"><i></i> System operational</div>
       <div class="topbar-actions">
         <button class="icon-button" (click)="loadQueue()" [disabled]="loading" aria-label="Refresh queue" title="Refresh queue">↻</button>
-        <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Use light mode' : 'Use dark mode'"><span>{{ isDarkMode ? 'Light' : 'Dark' }}</span></button>
+        <!-- <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Use light mode' : 'Use dark mode'"><span>{{ isDarkMode ? 'Light' : 'Dark' }}</span></button> -->
       </div>
     </header>
     <main>
-      <div class="notice success" *ngIf="message"><span>✓</span>{{ message }}</div>
+      <div class="notice success" *ngIf="message"><span>OK</span>{{ message }}</div>
       <div class="notice error" *ngIf="error"><span>!</span>{{ error }}</div>
       <app-queue-board [queue]="queue" [nextCustomer]="nextCustomer" [activeCustomer]="activeCustomer" (statusChanged)="changeStatus($event.customer, $event.status)"></app-queue-board>
       <app-customer-form (formSubmit)="onAddCustomer($event)"></app-customer-form>
