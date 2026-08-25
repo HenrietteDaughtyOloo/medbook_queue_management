@@ -1,59 +1,34 @@
-# Frontend
+# Medbook Queue Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27.
+Angular 19 single-page client for the Medbook queue API.
+I selected Angular not only because  I have prior experience with Angular but also because the brief prefers it. I used a standalone component and no router because there is only one page.
 
-## Development server
+## Run locally
 
-To start a local development server, run:
+Install dependencies and start the development server:
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open `http://localhost:4200/`. The development proxy sends `/api` requests to `http://127.0.0.1:8001`, so start the Laravel backend first.
 
-## Code scaffolding
+## Structure
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `src/app/app.component.*` composes the page and owns API state.
+- `src/app/components/sidebar/` contains navigation and section scrolling.
+- `src/app/components/queue-board/` displays the calculated queue and active session.
+- `src/app/components/customer-form/` handles customer registration input.
+- `src/app/services/queue.service.ts` contains the HTTP calls.
 
-```bash
-ng generate component component-name
-```
+The frontend does not calculate queue order. It displays the backend’s effective priority, waiting time, position, and next customer, and sends status actions back to the API. API validation messages are shown to the user. A refresh control reloads the current queue, and the theme toggle is stored locally.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Commands
 
 ```bash
-ng build
+npm run build
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The business-rule tests live in the Laravel backend. Angular tests should cover component rendering and service interaction as the frontend grows.
